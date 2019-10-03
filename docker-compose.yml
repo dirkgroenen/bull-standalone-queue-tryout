@@ -1,0 +1,32 @@
+version: '2'
+services:
+    app:
+        build: .
+        environment:
+            - NODE_ENV=development
+            - PORT=3000
+            - REDIS_HOST=redis
+        command: "npm run dev"
+        volumes:
+            - .:/var/www/app
+        links:
+            - redis
+        ports:
+            - "3000:3000"
+
+    worker:
+        build: .
+        environment:
+            - NODE_ENV=development
+            - PORT=3000
+            - REDIS_HOST=redis
+        command: "npm run worker:dev"
+        volumes:
+            - .:/var/www/app
+        links:
+            - redis
+
+    redis:
+        image: redis
+        expose:
+            - "6379"
